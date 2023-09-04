@@ -19,7 +19,16 @@ app.add_middleware(
 )
 
 
-@app.get("/users")
+@app.get("/")
+async def hello():
+    return "hello world"
+
+
+class UserOut(BaseModel):
+    page_index: int
+
+
+@app.get("/users", response_model=UserOut)
 async def read_users(
     *,
     page_size: Annotated[int, Query(description="每页条数", ge=10)] = 10,
