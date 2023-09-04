@@ -8,13 +8,13 @@ app = FastAPI(title="Fastapi Demo")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
     allow_headers=["*"],
+    allow_methods=["*"],
+    allow_credentials=False,
+    allow_origins=["*"],
     allow_origin_regex="",
-    expose_headers=[],
     max_age=600,
+    expose_headers=[],
 )
 
 

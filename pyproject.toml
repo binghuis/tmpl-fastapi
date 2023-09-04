@@ -10,6 +10,7 @@ dependencies = [
     "beepy>=1.0.7",
     "fastapi>=0.103.0",
     "uvicorn[standard]>=0.23.2",
+    "chromadb>=0.3.26",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
