@@ -1,8 +1,9 @@
 from enum import Enum
 from typing import Annotated
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Path, Query
+from fastapi import Body, FastAPI, Path, Query
 from pydantic import BaseModel, Field
+from uuid import UUID
 
 app = FastAPI(title="Fastapi Demo")
 
@@ -18,11 +19,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def read_root():
-    return "Hello World"
-
-
 @app.get("/users")
 async def read_users(
     *,
@@ -34,28 +30,25 @@ async def read_users(
 
 
 @app.get("/users/{id}")
-async def read_user(id: Annotated[int, Path(description="用户 ID")]):
+async def read_user(id: Annotated[UUID, Path(description="用户 ID")]):
     return {"id": id}
 
 
 class UserDetail(BaseModel):
-    address: str = None
+    address: str = Field(examples=["家庭地址"])
 
 
 class User(BaseModel):
-    name: str = Field(examples=["李华"])
-    age: int = Field(examples=[16])
+    name: str
+    age: int = Field(ge=1, description="年龄")
     detail: UserDetail = Field()
-    model_config = {
-        "json_schema_extra": {"examples": [{name: "李华", age: 16, detail: {}}]}
-    }
 
 
 @app.post("/users/create")
-async def create_user(user: User):
+async def create_user(user: Annotated[User, Body()]):
     return user
 
 
 @app.put("/users/{id}")
-async def update_user():
-    pass
+async def update_user(id: Annotated[UUID, Path()], user: Annotated[User, Body()]):
+    return {"id": id, **user.model_dump()}
