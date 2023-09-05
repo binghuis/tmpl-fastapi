@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends
+from backend.config.setting import settings
 from backend.dependencies import get_token_header
 
 from backend.internal import admin
 from . import items, users
 
-router = APIRouter(prefix="/api")
+router = APIRouter(prefix=settings.ROOT_PATH)
 
 router.include_router(users.router)
 router.include_router(items.router)
