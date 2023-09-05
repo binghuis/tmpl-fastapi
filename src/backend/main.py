@@ -22,4 +22,4 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello Bigger Applications!"}
+    return "hello world"
