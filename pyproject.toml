@@ -14,13 +14,12 @@ dependencies = [
     "httpx>=0.24.1",
     "pytest>=7.4.1",
     "python-multipart>=0.0.6",
+    "pydantic-settings>=2.0.3",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
 
-
-[tool.pdm.build]
 
 [tool.pdm.scripts]
 dev = "uvicorn backend.main:app --reload"

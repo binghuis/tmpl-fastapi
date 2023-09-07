@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI
 
 from backend.config.settings import settings
 
-from .dependencies import get_query_token
+from backend.utils.auth import get_query_token
 from backend.routers import router
 
 app = FastAPI(dependencies=[Depends(get_query_token)])

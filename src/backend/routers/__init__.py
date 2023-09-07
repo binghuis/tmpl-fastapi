@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from backend.config.settings import settings
-from backend.dependencies import get_token_header
+from backend.utils.auth import get_token_header
 
 from backend.internal import admin
 from . import items, users
