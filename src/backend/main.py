@@ -1,14 +1,14 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends, FastAPI
 
-from backend.config.settings import settings
+from .settings import settings
 
 from backend.utils.auth import get_query_token
-from backend.routers import router
+from backend.routers import root_router
 
 app = FastAPI(dependencies=[Depends(get_query_token)])
 
-app.include_router(router)
+app.include_router(root_router)
 
 
 if len(settings.BACKEND_CORS_ORIGINS) > 0:
