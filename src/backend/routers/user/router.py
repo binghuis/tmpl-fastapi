@@ -7,10 +7,10 @@ from . import crud, schema
 from backend.db import SessionLocal
 
 
-user_router = APIRouter()
+user_router = APIRouter(prefix="/users", tags=["users"])
 
 
-@user_router.post("/users/", response_model=schema.User)
+@user_router.post("/", response_model=schema.User)
 def create_user(user: schema.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -18,13 +18,13 @@ def create_user(user: schema.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-@user_router.get("/users/", response_model=list[schema.User])
+@user_router.get("/", response_model=list[schema.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
 
-@user_router.get("/users/{user_id}", response_model=schema.User)
+@user_router.get("/{user_id}", response_model=schema.User)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
@@ -32,7 +32,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-@user_router.post("/users/{user_id}/items/", response_model=schema.Item)
+@user_router.post("/{user_id}/items/", response_model=schema.Item)
 def create_item_for_user(
     user_id: int, item: schema.ItemCreate, db: Session = Depends(get_db)
 ):
