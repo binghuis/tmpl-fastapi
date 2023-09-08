@@ -1,7 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends, FastAPI
 
-from .config.settings import settings
+from backend.config import settings
 
 from backend.deps.auth import get_query_token
 from backend.routers import root_router

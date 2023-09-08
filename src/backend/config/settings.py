@@ -6,7 +6,7 @@ from pydantic import AnyHttpUrl, Field, PostgresDsn, AnyUrl, FileUrl
 from pydantic_settings import BaseSettings
 
 
-class _Settings(BaseSettings):
+class Settings(BaseSettings):
     ROOT_PATH: str = "/api"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
@@ -16,6 +16,3 @@ class _Settings(BaseSettings):
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
     BACKEND_CORS_ORIGINS: Set[AnyHttpUrl] = []
     SQLALCHEMY_DATABASE_URL: str = "postgresql://localhost"
-
-
-settings = _Settings()
