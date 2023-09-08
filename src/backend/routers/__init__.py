@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from backend.settings import settings
+from backend.config.settings import settings
 
 from .user.router import user_router
 

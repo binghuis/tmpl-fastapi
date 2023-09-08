@@ -1,9 +1,9 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends, FastAPI
 
-from .settings import settings
+from .config.settings import settings
 
-from backend.utils.auth import get_query_token
+from backend.deps.auth import get_query_token
 from backend.routers import root_router
 
 app = FastAPI(dependencies=[Depends(get_query_token)])
