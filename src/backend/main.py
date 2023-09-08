@@ -35,8 +35,3 @@ if len(settings.BACKEND_CORS_ORIGINS) > 0:
         max_age=600,
         expose_headers=[],
     )
-
-
-@app.get("/")
-async def root():
-    return "hello world"
