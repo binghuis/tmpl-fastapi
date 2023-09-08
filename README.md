@@ -8,3 +8,6 @@
 - 配置 MyPy，实现代码静态校验
 
 https://news.ycombinator.com/item?id=35906604
+
+
+[beekeeper studio community](https://github.com/beekeeper-studio/beekeeper-studio/releases)

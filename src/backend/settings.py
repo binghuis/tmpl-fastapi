@@ -1,10 +1,7 @@
 import secrets
 from typing import Any, Callable, Dict, List, Optional, Set, Union
 
-from pydantic import (
-    AnyHttpUrl,
-    Field,
-)
+from pydantic import AnyHttpUrl, Field, PostgresDsn, AnyUrl, FileUrl
 
 from pydantic_settings import BaseSettings
 
@@ -18,6 +15,7 @@ class _Settings(BaseSettings):
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
     BACKEND_CORS_ORIGINS: Set[AnyHttpUrl] = []
+    SQLALCHEMY_DATABASE_URL: str = "postgresql://localhost"
 
 
 settings = _Settings()
