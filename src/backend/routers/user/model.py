@@ -11,11 +11,8 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from backend.config import settings
 
 from backend.db.client import Base
-
-engine = create_engine(settings.SQLALCHEMY_URL, echo=settings.SQLALCHEMY_ECHO)
 
 
 class User(Base):
@@ -47,11 +44,3 @@ class Address(Base):
 
     def __repr__(self) -> str:
         return f"Address(id={self.id!r}, email_address={self.email_address!r})"
-
-
-def main():
-    Base.metadata.create_all(bind=engine)
-
-
-if __name__ == "__main__":
-    main()
