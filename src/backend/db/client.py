@@ -1,17 +1,13 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, DeclarativeBase, registry
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from backend.config import settings
-from sqlalchemy.schema import MetaData
-
-engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-reg = registry()
+from sqlalchemy.orm import Session
 
 
 class Base(DeclarativeBase):
-    registry = reg
+    pass
 
 
-MetaData().create_all(bind=engine)
+engine = create_engine(settings.SQLALCHEMY_URL, echo=settings.SQLALCHEMY_ECHO)
+
+Base.metadata.create_all(bind=engine)

@@ -1,26 +1,57 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from datetime import datetime
+from typing import List
+from sqlalchemy import (
+    DateTime,
+    Integer,
+    String,
+    Text,
+    create_engine,
+    func,
+    UniqueConstraint,
+    ForeignKey,
+)
+from sqlalchemy.orm import mapped_column, Mapped, relationship
+from backend.config import settings
 
-from backend.db import Base
+from backend.db.client import Base
+
+engine = create_engine(settings.SQLALCHEMY_URL, echo=settings.SQLALCHEMY_ECHO)
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
+    fullname: Mapped[str | None]
 
-    items = relationship("Item", back_populates="owner")
+    addresses: Mapped[List["Address"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+
+    def __str__(self):
+        return f"User(id={self.id!r}, name={self.name!r}), username={self.username!r}"
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
-class Item(Base):
-    __tablename__ = "items"
+class Address(Base):
+    __tablename__ = "address"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email_address: Mapped[str]
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
-    owner = relationship("User", back_populates="items")
+    user: Mapped["User"] = relationship(back_populates="addresses")
+
+    def __repr__(self) -> str:
+        return f"Address(id={self.id!r}, email_address={self.email_address!r})"
+
+
+def main():
+    Base.metadata.create_all(bind=engine)
+
+
+if __name__ == "__main__":
+    main()
