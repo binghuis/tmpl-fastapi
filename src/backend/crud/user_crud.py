@@ -16,8 +16,8 @@ def get_user_by_email(session: Session, name: str):
 
 
 def get_users(session: Session, skip: int = 0, limit: int = 100):
-    stmt = select(user_model.User).offset(skip).limit(limit).all()
-    return session.scalar(stmt)
+    stmt = select(user_model.User).offset(skip).limit(limit)
+    return session.execute(stmt).all()
 
 
 def create_user(session: Session, user: user_schema.UserCreate):
