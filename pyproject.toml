@@ -25,6 +25,6 @@ license = {text = "MIT"}
 
 
 [tool.pdm.scripts]
-dev = "uvicorn backend.main:app --reload"
+dev = "python src/backend/main.py"
 test = "pytest"
 

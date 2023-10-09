@@ -1,13 +1,14 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
-from backend.config import settings
+from backend.core.settings import settings
 
-from backend.routers import root_router
+from backend.api import routers
 
 app = FastAPI()
 
-app.include_router(root_router)
+app.include_router(routers)
 
 
 if len(settings.CORS_ORIGINS) > 0:
@@ -21,3 +22,14 @@ if len(settings.CORS_ORIGINS) > 0:
         max_age=600,
         expose_headers=[],
     )
+
+
+@app.get("/")
+async def health() -> JSONResponse:
+    return JSONResponse({"message": "It worked!!"})
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", reload=True)

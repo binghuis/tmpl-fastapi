@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from backend.config import settings
+from backend.core.settings import settings
 from backend.models import Base
 
 
