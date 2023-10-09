@@ -1,39 +1,44 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, status, Request, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
-
-from backend.api.schemas.user import User, UserCreate
-from backend.services.crud_user import get_user, get_user_by_email, get_users
+from backend.models.user import User
+from backend.api.schemas.user import UserSchema, UserResponse, UserLogin, TokenResponse
 
 
 user_router = APIRouter(prefix="/users", tags=["users"])
 
 
-@user_router.post("/", response_model=User)
-def create_user(user: UserCreate):
-    with Session as session:
-        db_user = get_user_by_email(session, email=user.email)
-        if db_user:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already registered",
-            )
-        return create_user(session=session, user=user)
+@user_router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
+async def create_user(
+    payload: UserSchema, request: Request, db_session: AsyncSession = Depends(get_db)
+):
+    _user: User = User(**payload.model_dump())
+    await _user.save(db_session)
+
+    # TODO: add refresh token
+    _user.access_token = await create_access_token(_user, request)
+    return _user
 
 
-@user_router.get("/", response_model=list[User])
-def read_users(skip: int = 0, limit: int = 100):
-    with Session as session:
-        users = get_users(session=session, skip=skip, limit=limit)
-        return users
+@user_router.post(
+    "/token", status_code=status.HTTP_201_CREATED, response_model=TokenResponse
+)
+async def get_token_for_user(
+    user: UserLogin, request: Request, db_session: AsyncSession = Depends(get_db)
+):
+    _user: User = await User.find(db_session, [User.email == user.email])
 
+    # TODO: out exception handling to external module
+    if not _user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+    if not _user.check_password(user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Password is incorrect"
+        )
 
-@user_router.get("/{user_id}", response_model=User)
-def read_user(user_id: int):
-    with Session as session:
-        db_user = get_user(session, user_id=user_id)
-        if db_user is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            )
-        return db_user
+    # TODO: add refresh token
+    _token = await create_access_token(_user, request)
+    return {"access_token": _token, "token_type": "bearer"}
