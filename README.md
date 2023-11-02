@@ -1,13 +1,10 @@
 # template-python
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+![mypy](https://img.shields.io/badge/type_checker-mypy-blue)
 
 
-- 使用 PDM 进行包管理
-- 配置 Block，实现代码自动格式化
-- 配置 MyPy，实现代码静态校验
+SQL client：[Beekeeper Studio](https://github.com/beekeeper-studio/beekeeper-studio/releases)
 
-https://news.ycombinator.com/item?id=35906604
+[It's 2023, how do you choose between MySQL and Postgres?](https://news.ycombinator.com/item?id=35906604)
 
-
-[beekeeper studio community](https://github.com/beekeeper-studio/beekeeper-studio/releases)
