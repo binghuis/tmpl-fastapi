@@ -5,6 +5,6 @@ from backend.deps.auth import get_query_token
 
 from .routers.user import user_router
 
-routers = APIRouter(prefix=settings.API_PREFIX)
+routers = APIRouter(prefix=settings.api_prefix)
 
 routers.include_router(user_router, dependencies=[Depends(get_query_token)])
