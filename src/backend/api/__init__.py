@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
-from backend.core.settings import settings
+
+from backend.core.config import settings
 from backend.deps.auth import get_query_token
 
 from .routers.user import user_router

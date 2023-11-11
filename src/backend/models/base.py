@@ -1,4 +1,7 @@
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, declared_attr
+import uuid
+
+from sqlalchemy import UUID
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -6,16 +9,18 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return f"{cls.__name__.lower()}_table"
+        return f'{cls.__name__.lower()}_table'
 
     def __repr__(self) -> str:
-        columns = ", ".join(
+        columns = ', '.join(
             [
-                f"{k}={repr(v)}"
+                f'{k}={repr(v)}'
                 for k, v in self.__dict__.items()
-                if not k.startswith("_")
+                if not k.startswith('_')
             ]
         )
-        return f"<{self.__class__.__name__}({columns})>"
+        return f'<{self.__class__.__name__}({columns})>'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), default=uuid.uuid4, primary_key=True
+    )
